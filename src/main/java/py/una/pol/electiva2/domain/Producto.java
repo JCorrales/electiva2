@@ -16,16 +16,18 @@ public class Producto implements BaseEntity {
 	private Long id;
 
 	private String codigo;
-	private String nombre = "Un nombre";
+	private String nombre;
 	private String descripcion;
 	private Long precio;
 	private Long stock = 0L;
 
+	@Override
 	public Long getId() {
 
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 
 		this.id = id;
