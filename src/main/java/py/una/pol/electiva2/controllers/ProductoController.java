@@ -2,12 +2,13 @@ package py.una.pol.electiva2.controllers;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
-import javax.inject.Named;
+import py.una.pol.electiva2.dao.LazyProductoDataModel;
 import py.una.pol.electiva2.dao.ProductoDAO;
 import py.una.pol.electiva2.domain.Producto;
 
-@Named
+@ManagedBean
 @SessionScoped
 public class ProductoController implements Serializable {
 
@@ -17,6 +18,8 @@ public class ProductoController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Inject
 	private ProductoDAO productoDAO;
+	@Inject
+	private LazyProductoDataModel dataModel;
 
 	private Producto producto = new Producto();
 
@@ -32,7 +35,22 @@ public class ProductoController implements Serializable {
 
 	public void guardar() {
 
-		productoDAO.create(producto);
+		if (producto.getId() != null) {
+			productoDAO.edit(producto);
+		} else {
+			productoDAO.create(producto);
+		}
+
+	}
+
+	public LazyProductoDataModel getDataModel() {
+
+		return dataModel;
+	}
+
+	public void setDataModel(LazyProductoDataModel dataModel) {
+
+		this.dataModel = dataModel;
 	}
 
 }

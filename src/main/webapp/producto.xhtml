@@ -1,44 +1,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="es"
+<html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Productos</title>
     </h:head>
     <h:body>
-        <h:form>
-        	<c:set var="producto" value="#{productoController.producto}" /> 
-            <h:graphicImage url="#{resource['images:duke.waving.gif']}"
-                            alt="Duke waving his hand"/>
-<!--             <h2>Hello, #{hello.name}!</h2> -->
-            <p></p>
-			<h:inputHidden id="id" value="#{producto.id}">
-			</h:inputHidden>
-			<label for="codigo"></label>
-            <p:inputText id="codigo" 
-            			 title="codigo "
-                         value="#{producto.codigo}"
-                         required="true"
-                         requiredMessage="Debe ingresar el codigo"/>
-            <label for="nombre"></label>
-			<p:inputText id="nombre"
-						 title="Nombre: "
-                         value="#{producto.nombre}"
-                         required="true"
-                         requiredMessage="Debe ingresar el nombre"/>
-            <label for="descripcion"></label>
-            <p:inputTextarea id="descripcion" rows="10" cols="30" value="#{producto.descripcion}"></p:inputTextarea>
-            <label for="precio"></label>
-            <div class="ui-inputgroup">
-            <span class="ui-inputgroup-addon">$</span>
-            <p:inputText placeholder="Precio" decimalPlaces="0" thousandSeparator="."/>
-            <span class="ui-inputgroup-addon"></span>      
-        </div>
-            <h:commandButton id="guardarBtn" value="Guardar" action="#{productoController.guardar()}" />
-        </h:form>
+        <div class="ui-g">
+		    <div class="ui-g-12 ui-md-6 ui-lg-4">
+		    	<ui:include src="producto_form.xhtml" />
+		    </div>
+		    
+		    <div class="ui-g-12 ui-md-6 ui-lg-8">
+		    	<ui:include src="producto_list.xhtml" />
+		    </div>
+		</div>
+    
     </h:body>
 </html>
