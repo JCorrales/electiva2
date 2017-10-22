@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"> 
+<div class="ui-g">
+	<h:form id="productoDataTableForm">
+	    <p:dataTable var="productoItem" id="productoTable" paginatorAlwaysVisible="false" value="#{productoDM}" paginator="true" rows="10"
+	                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	                 rowsPerPageTemplate="5,10,15" lazy="true" sortMode="multiple" widgetVar="prodWidget">
+	                 
+	        <p:column headerText="Id" sortBy="#{productoItem.id}" filterBy="#{productoItem.id}">
+		        <f:facet name="filter">
+		           <p:inputNumber onkeypress="filtrar(event)" decimalPlaces="0" thousandSeparator=""></p:inputNumber>
+	            </f:facet>
+	            <h:outputText value="#{productoItem.id}"/>
+	        </p:column>
+	        <p:column headerText="Código" sortBy="#{productoItem.codigo}" filterBy="#{productoItem.codigo}">
+	            <h:outputText value="#{productoItem.codigo}" />
+	        </p:column>
+	        <p:column headerText="Nombre" sortBy="#{productoItem.nombre}" filterBy="#{productoItem.nombre}">
+	            <h:outputText value="#{productoItem.nombre}" />
+	        </p:column>
+	        <p:column headerText="Precio" sortBy="#{productoItem.precio}" filterBy="#{productoItem.precio}">
+	        	<f:facet name="filter">
+		           <p:inputNumber onkeypress="filtrar(event)" decimalPlaces="0"></p:inputNumber>
+	            </f:facet>
+	            <h:outputText value="#{productoItem.precio}" />
+	        </p:column>
+	        <p:column headerText="Stock" sortBy="#{productoItem.stock}" filterBy="#{productoItem.stock}">
+	        	<f:facet name="filter">
+		           <p:inputNumber onkeypress="filtrar(event)" decimalPlaces="0" thousandSeparator=""></p:inputNumber>
+	            </f:facet>
+	            <h:outputText value="#{productoItem.stock}" />
+	        </p:column>
+     	</p:dataTable>
+	    
+    </h:form>
+    <script type="text/javascript">
+    	function filtrar(e){
+    		if(e.keyCode == 13)
+    		{
+    		    PF('prodWidget').filter();
+    		}
+    		return false;
+        }
+    </script>
+</div>
+</ui:composition>
