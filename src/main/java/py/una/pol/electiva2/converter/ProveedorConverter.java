@@ -1,7 +1,6 @@
 package py.una.pol.electiva2.converter;
 
 import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -12,7 +11,6 @@ import py.una.pol.electiva2.domain.BaseEntity;
 import py.una.pol.electiva2.domain.Proveedor;
 
 @FacesConverter("proveedorConverter")
-@SessionScoped
 public class ProveedorConverter implements Serializable, Converter {
 
 	/**

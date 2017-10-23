@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<style type="text/css">
+.form-input {
+	width: 100%;
+}
+
+.guardar-btn {
+	color: #fff !important;
+	background-color: #5cb85c !important;
+	border-color: #4cae4c !important;
+}
+
+.nuevo-btn {
+	margin-left: 5px;
+	color: #fff;
+	background-color: #31b0d5;
+	border-color: #269abc;
+}
+</style>
+	<div class="ui-g">
+	
+		<h:form>
+			<p:selectOneMenu id="proveedor" value="#{compraCabController.proveedor}" style="width:150px" 
+			converter="proveedorConverter" onchange="filtrar()" > 
+                <f:selectItems value="#{compraCabController.getProveedores()}" var="item" 
+                itemValue="#{item}" itemLabel="#{item.nombre}"/>
+            </p:selectOneMenu>
+            <h:commandButton id="guardarBtn" value="Buscar productos"
+					action="#{compraCabController.nuevo()}" styleClass="nuevo-btn" />
+		</h:form>
+		<h:form>
+			<c:set var="compra" value="#{compraCabController.entity}" />
+			<h:inputHidden id="id" value="#{compra.id}">
+			</h:inputHidden>
+			
+			
+			<div class="ui-g-12">
+
+				<p:dataTable editable="true" editMode="cell" id="checkboxDT" var="compraDet" value="#{compraCabController.compraDetByProveedor}"
+					selection="#{compraCabController.selectedDetails}" rowKey="#{compraDet.producto.id}"
+					style="margin-bottom:0" widgetVar="compraDetWidget">
+					<f:facet name="header"> Eliga los productos </f:facet>
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+					<p:column headerText="Id">
+						<h:outputText value="#{compraDet.id}" />
+					</p:column>
+					<p:column headerText="Producto">
+						<h:outputText value="#{compraDet.producto.nombre}" />
+					</p:column>
+					<p:column headerText="Precio">
+						<h:outputText value="#{compraDet.producto.precio}" />
+					</p:column>
+					<p:column headerText="Cantidad">
+						<p:cellEditor>
+			               <f:facet name="output"><h:outputText value="#{compraDet.cantidad}" /></f:facet>
+			               <f:facet name="input"><p:inputText value="#{compraDet.cantidad}" style="width:96%" label="Cantidad"/></f:facet>
+			           </p:cellEditor>
+						
+					</p:column>
+					<f:facet name="footer">
+					<div class="ui-g-12">
+						<h:commandButton id="guardarBtn" value="Guardar"  process="checkboxDT" update=":form:compraDetWidget"
+							action="#{compraCabController.guardar()}" styleClass="guardar-btn" />
+						<h:commandButton id="nuevoBtn" value="Nuevo"
+							action="#{compraCabController.nuevo()}" styleClass="nuevo-btn" />
+					</div>
+					</f:facet>
+				</p:dataTable>
+				
+				<script type="text/javascript">  
+			    	function filtrar(){
+			    		    PF('compraDetWidget').filter();
+			    		return;
+			        }
+			    </script>
+
+			</div>
+
+			
+		</h:form>
+	</div>
+</ui:composition>

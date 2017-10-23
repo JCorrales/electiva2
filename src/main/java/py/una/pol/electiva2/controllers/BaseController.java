@@ -50,6 +50,7 @@ public abstract class BaseController<M extends BaseEntity> implements Serializab
 
 	public void setEntity(M entity) {
 
+		LOGGER.info("setting entity {}", entity);
 		this.entity = entity;
 	}
 
@@ -82,7 +83,6 @@ public abstract class BaseController<M extends BaseEntity> implements Serializab
 		} else {
 			getEntityDAO().create(entity);
 		}
-
 	}
 
 	public void destroy(M entity) {
@@ -98,7 +98,7 @@ public abstract class BaseController<M extends BaseEntity> implements Serializab
 		// https://stackoverflow.com/questions/32947472/how-to-reload-page-when-a-button-is-clicked
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		try {
-			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+			ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURL().toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

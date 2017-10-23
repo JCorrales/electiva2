@@ -77,7 +77,7 @@
 <!-- 					</p:column> -->
 <!-- 				</p:selectOneListbox> -->
 					<p:selectOneMenu id="proveedor" value="#{productoController.entity.proveedor}" style="width:150px" converter="proveedorConverter">
-		                <f:selectItems value="#{productoController.getProveedores()}" var="item" itemValue="#{item}" itemLabel="#{item.nombre}" actionListener="#{productoController.onSelectProvider}"/>
+		                <f:selectItems value="#{productoController.getProveedores()}" var="item" itemValue="#{item}" itemLabel="#{item.nombre}"/>
 		            </p:selectOneMenu>
 			</div>
 
