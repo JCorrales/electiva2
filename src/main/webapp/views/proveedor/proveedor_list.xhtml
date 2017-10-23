@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<div class="ui-g">
+		<h:form id="proveedorDataTableForm">
+			<p:dataTable var="proveedorItem" id="proveedorTable"
+				paginatorAlwaysVisible="false" value="#{proveedorDM}"
+				paginator="true" rows="10"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowsPerPageTemplate="5,10,15" lazy="true" sortMode="multiple"
+				widgetVar="proveedorWidget">
+
+				<p:column headerText="Id" sortBy="#{proveedorItem.id}"
+					filterBy="#{proveedorItem.id}">
+					<f:facet name="filter">
+						<p:inputNumber onkeypress="return filtrar(event)"
+							decimalPlaces="0" thousandSeparator=""></p:inputNumber>
+					</f:facet>
+					<h:outputText value="#{proveedorItem.id}" />
+				</p:column>
+				<p:column headerText="RUC" sortBy="#{proveedorItem.ruc}"
+					filterBy="#{proveedorItem.ruc}">
+					<h:outputText value="#{proveedorItem.ruc}" />
+				</p:column>
+				<p:column headerText="Nombre" sortBy="#{proveedorItem.nombre}"
+					filterBy="#{proveedorItem.nombre}">
+					<h:outputText value="#{proveedorItem.nombre}" />
+				</p:column>
+				
+				<p:column style="width:32px;text-align: center" exportable="false">
+					<p:commandButton
+						action="#{proveedorController.setEntity(proveedorItem)}"
+						icon="fa fa-fw fa-edit" ajax="false" />
+				</p:column>
+
+				<p:column style="width:32px;text-align: center" exportable="false">
+					<p:commandButton icon="fa fa-fw fa-remove"
+						action="#{proveedorController.destroy(proveedorItem)}"
+						styleClass="red-button">
+						<p:confirm header="Confirmation"
+							message="Desea eliminar el registro?" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h4>Exportar datos</h4>
+			<h:commandLink>
+				<p:graphicImage url="/images/excel.png"
+					style="max-width:50px;max-heigth:50px;border:1px solid #ccc!important" />
+				<p:dataExporter type="xls" target="proveedorTable"
+					fileName="proveedores" pageOnly="true" />
+			</h:commandLink>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+		<script type="text/javascript">  
+    	function filtrar(e){
+    		if(e.keyCode == 13)
+    		{
+    		    PF('proveedorWidget').filter();
+    		}
+    		e.stopPropagation();
+    		return false;
+        }
+    </script>
+	</div>
+</ui:composition>

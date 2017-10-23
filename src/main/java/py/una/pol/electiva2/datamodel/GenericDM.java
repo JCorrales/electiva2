@@ -1,4 +1,4 @@
-package py.una.pol.electiva2.dao;
+package py.una.pol.electiva2.datamodel;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,7 +28,7 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3749560660645858135L;
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Resource

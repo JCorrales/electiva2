@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<style type="text/css">
+		.form-input {
+			width: 100%;
+		}
+		
+		.guardar-btn {
+			color: #fff !important;
+			background-color: #5cb85c !important;
+			border-color: #4cae4c !important;
+		}
+		
+		.nuevo-btn {
+			margin-left: 5px;
+			color: #fff;
+		    background-color: #31b0d5;
+		    border-color: #269abc;
+		}
+</style>
+	<div class="ui-g">
+		<h:form>
+			<c:set var="proveedor" value="#{proveedorController.entity}" />
+			<h:inputHidden id="id" value="#{proveedor.id}">
+			</h:inputHidden>
+
+			<div class="ui-g-12">
+				<h:graphicImage style="max-height:200px; max-width:200px"
+					url="/images/nopic.jpg" />
+			</div>
+			<div class="ui-g-12">
+				<p:outputLabel for="ruc">RUC</p:outputLabel>
+				<br />
+				<p:inputText id="ruc" class="form-input" title="RUC"
+					value="#{proveedor.ruc}" required="true"
+					requiredMessage="Debe ingresar el RUC" />
+			</div>
+			<div class="ui-g-12">
+				<p:outputLabel for="nombre">Nombre:</p:outputLabel>
+				<br />
+				<p:inputText id="nombre" title="Nombre: " value="#{proveedor.nombre}"
+					class="form-input" required="true"
+					requiredMessage="Debe ingresar el nombre" />
+			</div>
+			<div class="ui-g-12">
+				<p:outputLabel for="observacion">Descripción:</p:outputLabel>
+				<br />
+				<p:inputTextarea id="observacion" rows="5" class="form-input"
+					value="#{proveedor.observacion}"></p:inputTextarea>
+			</div>
+
+			<div class="ui-g-12">
+				<h:commandButton id="guardarBtn" value="Guardar"
+					action="#{proveedorController.guardar()}" styleClass="guardar-btn" />
+				<h:commandButton id="nuevoBtn" value="Nuevo"
+					action="#{proveedorController.nuevo()}" styleClass="nuevo-btn" />
+			</div>
+		</h:form>
+	</div>
+</ui:composition>

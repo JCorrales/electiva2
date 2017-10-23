@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<div class="ui-g">
+		<h:form id="productoDataTableForm">
+			<p:dataTable var="productoItem" id="productoTable"
+				paginatorAlwaysVisible="false" value="#{productoDM}"
+				paginator="true" rows="10"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowsPerPageTemplate="5,10,15" lazy="true" sortMode="multiple"
+				widgetVar="prodWidget">
+
+				<p:column headerText="Id" sortBy="#{productoItem.id}"
+					filterBy="#{productoItem.id}">
+					<f:facet name="filter">
+						<p:inputNumber onkeypress="return filtrar(event)"
+							decimalPlaces="0" thousandSeparator=""></p:inputNumber>
+					</f:facet>
+					<h:outputText value="#{productoItem.id}" />
+				</p:column>
+				<p:column headerText="Código" sortBy="#{productoItem.codigo}"
+					filterBy="#{productoItem.codigo}">
+					<h:outputText value="#{productoItem.codigo}" />
+				</p:column>
+				<p:column headerText="Nombre" sortBy="#{productoItem.nombre}"
+					filterBy="#{productoItem.nombre}">
+					<h:outputText value="#{productoItem.nombre}" />
+				</p:column>
+				<p:column headerText="Precio" sortBy="#{productoItem.precio}"
+					filterBy="#{productoItem.precio}">
+					<f:facet name="filter">
+						<p:inputNumber onkeypress="return filtrar(event)"
+							decimalPlaces="0"></p:inputNumber>
+					</f:facet>
+					<h:outputText value="#{productoItem.precio}" />
+				</p:column>
+				<p:column headerText="Stock" sortBy="#{productoItem.stock}"
+					filterBy="#{productoItem.stock}">
+					<f:facet name="filter">
+						<p:inputNumber onkeypress="return filtrar(event)"
+							decimalPlaces="0" thousandSeparator=""></p:inputNumber>
+					</f:facet>
+					<h:outputText value="#{productoItem.stock}" />
+				</p:column>
+				<p:column style="width:32px;text-align: center" exportable="false">
+					<p:commandButton
+						action="#{productoController.setEntity(productoItem)}"
+						icon="fa fa-fw fa-edit" ajax="false" />
+				</p:column>
+
+				<p:column style="width:32px;text-align: center" exportable="false">
+					<p:commandButton icon="fa fa-fw fa-remove"
+						action="#{productoController.destroy(productoItem)}"
+						styleClass="red-button">
+						<p:confirm header="Confirmation"
+							message="Desea eliminar el registro?" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h4>Exportar datos</h4>
+			<h:commandLink>
+				<p:graphicImage url="/images/excel.png"
+					style="max-width:50px;max-heigth:50px;border:1px solid #ccc!important" />
+				<p:dataExporter type="xls" target="productoTable"
+					fileName="productos" pageOnly="true" />
+			</h:commandLink>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+		<script type="text/javascript">  
+    	function filtrar(e){
+    		if(e.keyCode == 13)
+    		{
+    		    PF('prodWidget').filter();
+    		}
+    		e.stopPropagation();
+    		return false;
+        }
+    </script>
+	</div>
+</ui:composition>
