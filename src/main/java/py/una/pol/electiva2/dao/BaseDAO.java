@@ -2,10 +2,13 @@ package py.una.pol.electiva2.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +17,11 @@ import py.una.pol.electiva2.domain.BaseEntity;
 public class BaseDAO<M extends BaseEntity> {
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 	@Resource
-	private UserTransaction userTransaction;
-	private Type argumentType;
-	private Class<?> argumentClass;
+	protected UserTransaction userTransaction;
+	protected Type argumentType;
+	protected Class<?> argumentClass;
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -84,5 +87,22 @@ public class BaseDAO<M extends BaseEntity> {
 		if (entity != null)
 			return (M) entity;
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<M> findAll() {
+
+		try {
+			userTransaction.begin();
+			Query query = entityManager.createQuery("FROM " + argumentClass.getSimpleName());
+			List<M> resultList = query.getResultList();
+			userTransaction.commit();
+			LOGGER.info("registros encontrados {}", resultList.size());
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
+
 	}
 }

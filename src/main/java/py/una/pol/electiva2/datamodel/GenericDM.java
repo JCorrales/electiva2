@@ -30,13 +30,14 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 	 */
 	private static final long serialVersionUID = 3749560660645858135L;
 	@PersistenceContext
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 	@Resource
-	private UserTransaction userTransaction;
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	private Type argumentType;
-	private Class<?> argumentClass;
-	private List<String> fieldsNames = new ArrayList<>();
+	protected UserTransaction userTransaction;
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	protected Type argumentType;
+	protected Class<?> argumentClass;
+	protected List<String> fieldsNames = new ArrayList<>();
+	protected String alias = "o";
 
 	@PostConstruct
 	public void init() {
@@ -49,6 +50,8 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 			for (Field field : this.argumentClass.getDeclaredFields()) {
 				if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())
 						|| Modifier.isTransient(field.getModifiers()))
+					continue;
+				if (BaseEntity.class.isAssignableFrom(field.getType()))
 					continue;
 				fieldsNames.add(field.getName());
 			}
@@ -89,7 +92,7 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 				if (!isField(sortMeta.getSortField()))
 					continue;
 				LOGGER.info("creando order, columna {} dirección {}", sortMeta.getSortField(), sortMeta.getSortOrder());
-				order += sortMeta.getSortField() + " " + getOrderDir(sortMeta.getSortOrder()) + ", ";
+				order += getSortFieldExpression(sortMeta) + " " + getOrderDir(sortMeta.getSortOrder()) + ", ";
 			}
 			order = order.substring(0, order.length() - ", ".length());
 			sql += order;
@@ -104,19 +107,19 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 		return resultList;
 	}
 
-	private String getSelect() {
+	protected String getSelect() {
 
 		// https://www.thoughts-on-java.org/jpa-native-queries/
 		String select = "SELECT ";
 		for (String name : fieldsNames) {
-			select += "o." + name + ", ";
+			select += alias + "." + name + ", ";
 		}
 		select = select.substring(0, select.length() - ", ".length());
-		select += " FROM " + argumentClass.getSimpleName() + " o";
+		select += " FROM " + argumentClass.getSimpleName() + " " + alias;
 		return select;
 	}
 
-	private void setParams(Query query, Map<String, Object> filters) {
+	protected void setParams(Query query, Map<String, Object> filters) {
 
 		Set<Entry<String, Object>> entries = filters.entrySet();
 		int index = 1;
@@ -126,7 +129,7 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 		}
 	}
 
-	private String getOrderDir(SortOrder dir) {
+	protected String getOrderDir(SortOrder dir) {
 
 		if (SortOrder.DESCENDING.equals(dir)) {
 			return "desc";
@@ -140,7 +143,7 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 		return object.getId();
 	}
 
-	private String getMatchExpression(Map.Entry<String, Object> filtro) {
+	protected String getMatchExpression(Map.Entry<String, Object> filtro) {
 
 		Class<?> fieldType = Void.class;
 		try {
@@ -151,13 +154,13 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 
 		switch (fieldType.getName()) {
 			case "java.lang.String":
-				return " " + filtro.getKey() + " ILIKE ";
+				return " " + alias + "." + filtro.getKey() + " ILIKE ";
 			default:
-				return " CAST(" + filtro.getKey() + " AS VARCHAR) = ";
+				return " CAST(" + alias + "." + filtro.getKey() + " AS VARCHAR) = ";
 		}
 	}
 
-	private boolean isField(String key) {
+	protected boolean isField(String key) {
 
 		for (String name : this.fieldsNames) {
 			if (name.equals(key))
@@ -166,7 +169,7 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 		return false;
 	}
 
-	private String getParamExpression(Entry<String, Object> filtro) {
+	protected String getParamExpression(Entry<String, Object> filtro) {
 
 		Class<?> fieldType = Void.class;
 		try {
@@ -182,12 +185,17 @@ public abstract class GenericDM<M extends BaseEntity> extends LazyDataModel<M> {
 		}
 	}
 
-	private String getDefaultParamExpression(Class<?> fieldType, Entry<String, Object> filtro) {
+	protected String getDefaultParamExpression(Class<?> fieldType, Entry<String, Object> filtro) {
 
 		if (Number.class.isAssignableFrom(fieldType)) {
 			filtro.setValue(filtro.getValue().toString().replaceAll(Pattern.quote("."), "").replaceAll(",", ""));
 		}
 		return " ? ";
+	}
+
+	protected String getSortFieldExpression(SortMeta sortMeta) {
+
+		return alias + "." + sortMeta.getSortField();
 	}
 
 }

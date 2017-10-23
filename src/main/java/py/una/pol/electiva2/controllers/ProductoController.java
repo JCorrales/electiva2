@@ -1,73 +1,70 @@
 package py.una.pol.electiva2.controllers;
 
-import javax.enterprise.context.SessionScoped;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import py.una.pol.electiva2.dao.ProveedorDAO;
 import py.una.pol.electiva2.domain.Producto;
+import py.una.pol.electiva2.domain.Proveedor;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ProductoController extends BaseController<Producto> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 455954501903162338L;
-	//
-	// /**
-	// *
-	// */
-	// private static final long serialVersionUID = -1089588317286581294L;
-	//
-	// @Inject
-	// private ProductoDAO productoDAO;
-	//
-	// private Producto producto = new Producto();
-	//
-	// public Producto getProducto() {
-	//
-	// return producto;
-	// }
-	//
-	// public void setProducto(Producto producto) {
-	//
-	// this.producto = producto;
-	// }
-	//
-	// public void nuevo() {
-	//
-	// this.producto = new Producto();
-	// }
-	//
-	// public void guardar() {
-	//
-	// if (producto.getId() != null) {
-	// productoDAO.edit(producto);
-	// } else {
-	// productoDAO.create(producto);
-	// }
-	//
-	// }
-	//
-	// public void destroy(Producto producto) {
-	//
-	// productoDAO.destroy(producto);
-	// reload();
-	// }
-	//
-	// public void reload() {
-	//
-	// //
-	// https://stackoverflow.com/questions/570015/how-do-i-reload-a-page-without-a-postdata-warning-in-javascript
-	// //
-	// https://stackoverflow.com/questions/32947472/how-to-reload-page-when-a-button-is-clicked
-	// ExternalContext ec =
-	// FacesContext.getCurrentInstance().getExternalContext();
-	// try {
-	// ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+	@Inject
+	private ProveedorDAO proveedorDAO;
+
+	@Override
+	@PostConstruct
+	public void init() {
+
+		Producto p = new Producto();
+		p.setProveedor(new Proveedor());
+		setEntity(p);
+		super.init();
+	}
+
+	public List<Proveedor> getProveedores() {
+
+		return proveedorDAO.findAll();
+	}
+
+	@Override
+	public void setEntity(Producto entity) {
+
+		// TODO Auto-generated method stub
+		super.setEntity(entity);
+	}
+
+	@Override
+	public Producto getEntity() {
+
+		// TODO Auto-generated method stub
+		return super.getEntity();
+	}
+
+	public void onSelectProvider(ActionEvent action) {
+
+		LOGGER.info("{}", action);
+
+	}
+
+	@Override
+	public void guardar() {
+
+		LOGGER.info("************ guardando{}", getEntity());
+		super.guardar();
+	}
 
 }

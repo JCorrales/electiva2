@@ -9,6 +9,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import py.una.pol.electiva2.dao.BaseDAO;
 import py.una.pol.electiva2.domain.BaseEntity;
 
@@ -18,6 +20,8 @@ public abstract class BaseController<M extends BaseEntity> implements Serializab
 	 * 
 	 */
 	private static final long serialVersionUID = -5441549478756438853L;
+
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	private Type argumentType;
 	private Class<?> argumentClass;
@@ -89,6 +93,7 @@ public abstract class BaseController<M extends BaseEntity> implements Serializab
 
 	public void reload() {
 
+		LOGGER.info("recargando pagina, entidad {}", entity);
 		// https://stackoverflow.com/questions/570015/how-do-i-reload-a-page-without-a-postdata-warning-in-javascript
 		// https://stackoverflow.com/questions/32947472/how-to-reload-page-when-a-button-is-clicked
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

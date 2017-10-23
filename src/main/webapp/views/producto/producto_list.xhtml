@@ -29,6 +29,10 @@
 					filterBy="#{productoItem.nombre}">
 					<h:outputText value="#{productoItem.nombre}" />
 				</p:column>
+				<p:column headerText="Proveedor" sortBy="#{productoItem.proveedor.nombre}"
+					filterBy="#{productoItem.proveedor.nombre}">
+					<h:outputText value="#{productoItem.proveedor.nombre}" />
+				</p:column>
 				<p:column headerText="Precio" sortBy="#{productoItem.precio}"
 					filterBy="#{productoItem.precio}">
 					<f:facet name="filter">
